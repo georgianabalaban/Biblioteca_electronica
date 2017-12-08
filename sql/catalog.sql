@@ -7,10 +7,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `magazin`
+-- Database: `biblioteca_electronica`
 --
-CREATE DATABASE `catalog` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `catalog`;
+CREATE DATABASE `biblioteca_electronica` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `biblioteca_electronica`;
 
 -- --------------------------------------------------------
 
@@ -31,14 +31,15 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Table structure for table `documents`
 --
 
-CREATE TABLE IF NOT EXISTS `products` (
+CREATE TABLE IF NOT EXISTS `documents` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` smallint(5) DEFAULT NULL,
   `name` varchar(30) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
+  `author` varchar(30) DEFAULT NULL,
   `price` int(11) NOT NULL,
   `file` varchar(100) DEFAULT NULL,
   `createdAt` timestamp,

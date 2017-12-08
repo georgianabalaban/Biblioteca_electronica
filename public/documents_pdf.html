@@ -22,7 +22,7 @@
     
     
     <!-- Custom JS file -->
-    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/documents_pdf.js"></script>
 </head>
 <body>
 
@@ -30,12 +30,6 @@
 
   <nav class="nav-menu nav-effect-1" id="menu-1">
     <h2 class="">The Library</h2>
-    <ul>
-      <li><a class="" href="#">Checkout</a></li>
-      <li><a class="" href="#">Return</a></li>
-      <li><a class="" href="#">About</a></li>
-      <li><a class="" href="#">Contact</a></li>
-    </ul>
   </nav>
 
   <div class="main clearfix">
@@ -52,7 +46,7 @@
         <div class="menu-search">
           <!-- Main Navigation -->
           <div class="main-navigation">
-            
+              <a href="#">Menu</a>
           </div>
 
           <!-- Search -->
@@ -81,11 +75,11 @@
         <div class="toolbar row">
           <div class="filter-options small-12 medium-9 columns">
             <a href="#" class="filter-item active" data-group="all">All Categories</a>
-            <a href="#" class="filter-item" data-group="fantasy">DOC Files</a>
-            <a href="#" class="filter-item" data-group="sci-fi">HTML Files</a>
-            <a href="#" class="filter-item" data-group="classic">XLS Files</a>
-            <a href="#" class="filter-item" data-group="fairy">PDF Files</a>
-            <a href="#" class="filter-item" data-group="young">PPT Files</a>
+            <a href="documents_doc.html" class="filter-item" data-group="fantasy">DOC Files</a>
+            <a href="documents_html.html" class="filter-item" data-group="sci-fi">HTML Files</a>
+            <a href="documents_xls.html" class="filter-item" data-group="classic">XLS Files</a>
+            <a href="documents_pdf.html" class="filter-item" data-group="fairy">PDF Files</a>
+            <a href="documents_ppt.html" class="filter-item" data-group="young">PPT Files</a>
           </div>
 
           <div class="small-12 medium-3 columns">
@@ -97,7 +91,14 @@
           </div>
         </div>
       </section>
-    </div>
+      <div id="grid" style="width:100%">
+          <div id="left" style="width:50%;float:left">
+            
+          </div>
+          <div id="right" style="width:50%;float:right">
+            
+          </div>
+      </div>
     
   </div>
   </div>

@@ -142,9 +142,7 @@ function readRecords() {
             var row = '<div class="file">'
             			+ displayColumns(value)
         				+ '</div>';
-        		if(value.id%2!=0){
-            $('#grid #left').append(row);
-        		}else{
+        		if(value.id==4){
         		  $('#grid #right').append(row);
         		}
         });

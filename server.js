@@ -3,7 +3,7 @@ var Sequelize = require("sequelize")
 var nodeadmin = require("nodeadmin")
 
 //connect to mysql database
-var sequelize = new Sequelize('catalog', 'root', '', {
+var sequelize = new Sequelize('biblioteca_electronica', 'root', '', {
     dialect:'mysql',
     host:'localhost'
 })
@@ -18,15 +18,16 @@ var Categories = sequelize.define('categories', {
     description: Sequelize.STRING
 })
 
-var Products = sequelize.define('products', {
+var Documents = sequelize.define('documents', {
     name: Sequelize.STRING,
     category_id: Sequelize.INTEGER,
     description: Sequelize.STRING,
+    author: Sequelize.STRING,
     price: Sequelize.INTEGER,
     file: Sequelize.STRING
 })
 
-Products.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
+Documents.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
 //Categories.hasMany(Products)
 
 var app = express()
@@ -91,38 +92,38 @@ app.delete('/categories/:id', function(request, response) {
     })
 })
 
-app.get('/products', function(request, response) {
-    Products.findAll(
+app.get('/documents', function(request, response) {
+    Documents.findAll(
         {
             include: [{
                 model: Categories,
-                where: { id: Sequelize.col('products.category_id') }
+                where: { id: Sequelize.col('documents.category_id') }
             }]
         }
         
         ).then(
-            function(products) {
-                response.status(200).send(products)
+            function(documents) {
+                response.status(200).send(documents)
             }
         )
 })
 
-app.get('/products/:id', function(request, response) {
-    Products.findById(request.params.id).then(
+app.get('/documents/:id', function(request, response) {
+    Documents.findById(request.params.id).then(
             function(product) {
                 response.status(200).send(product)
             }
         )
 })
 
-app.post('/products', function(request, response) {
-    Products.create(request.body).then(function(product) {
+app.post('/documents', function(request, response) {
+    Documents.create(request.body).then(function(product) {
         response.status(201).send(product)
     })
 })
 
-app.put('/products/:id', function(request, response) {
-    Products.findById(request.params.id).then(function(product) {
+app.put('/documents/:id', function(request, response) {
+    Documents.findById(request.params.id).then(function(product) {
         if(product) {
             product.update(request.body).then(function(product){
                 response.status(201).send(product)
@@ -135,8 +136,8 @@ app.put('/products/:id', function(request, response) {
     })
 })
 
-app.delete('/products/:id', function(request, response) {
-    Products.findById(request.params.id).then(function(product) {
+app.delete('/documents/:id', function(request, response) {
+    Documents.findById(request.params.id).then(function(product) {
         if(product) {
             product.destroy().then(function(){
                 response.status(204).send()
@@ -147,8 +148,8 @@ app.delete('/products/:id', function(request, response) {
     })
 })
 
-app.get('/categories/:id/products', function(request, response) {
-    Products.findAll({where:{category_id: request.params.id}}).then(
+app.get('/categories/:id/documents', function(request, response) {
+    Documents.findAll({where:{category_id: request.params.id}}).then(
             function(products) {
                 response.status(200).send(products)
             }
