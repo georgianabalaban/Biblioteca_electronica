@@ -35,7 +35,7 @@ var app = express()
 app.use('/nodeamin', nodeadmin(app))
 
 //access static files
-app.use(express.static('public'))
+app.use(express.static('../frontend/build'))
 
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies

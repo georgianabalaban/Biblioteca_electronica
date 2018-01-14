@@ -142,8 +142,12 @@ function readRecords() {
             var row = '<div class="file">'
             			+ displayColumns(value)
         				+ '</div>';
-        		if(value.id==4){
-        		  $('#grid #right').append(row);
+        		if(value.category_id==1){
+        		  if(value.id%2==0){
+                $('#grid #left').append(row);
+        		  }else{
+        		    $('#grid #right').append(row);
+        		  }
         		}
         });
     });
@@ -154,26 +158,119 @@ function readRecords() {
 function displayColumns(value) {
   if(value.category_id==1){
     return 	'<div class="docimg" id="doc_img"></div>'+'<div class="detalii_doc"><div class="nume">'+value.name+'</div>'+'<div class="descriere">'+value.description+'</div>'
-    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>';
+    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>'
+    +'<div class="linkuri"><button onclick="viewRecord('+ value.id +')" class="btn btn-edit">Update</button><button onclick="deleteRecord('+ value.id +')" class="btn btn-danger">Delete</button></div>';
   }
   if(value.category_id==2){
     return 	'<div class="docimg" id="html_img"></div>'+'<div class="detalii_doc"><div class="nume">'+value.name+'</div>'+'<div class="descriere">'+value.description+'</div>'
-    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>';
+    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>'
+    +'<div class="linkuri"><button onclick="viewRecord('+ value.id +')" class="btn btn-edit">Update</button><button onclick="deleteRecord('+ value.id +')" class="btn btn-danger">Delete</button></div>';
   }
   if(value.category_id==3){
     return 	'<div class="docimg" id="xls_img"></div>'+'<div class="detalii_doc"><div class="nume">'+value.name+'</div>'+'<div class="descriere">'+value.description+'</div>'
-    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>';
+    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>'
+    +'<div class="linkuri"><button onclick="viewRecord('+ value.id +')" class="btn btn-edit">Update</button><button onclick="deleteRecord('+ value.id +')" class="btn btn-danger">Delete</button></div>';
   }
   if(value.category_id==4){
     return 	'<div class="docimg" id="pdf_img"></div>'+'<div class="detalii_doc"><div class="nume">'+value.name+'</div>'+'<div class="descriere">'+value.description+'</div>'
-    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>';
+    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>'
+    +'<div class="linkuri"><button onclick="viewRecord('+ value.id +')" class="btn btn-edit">Update</button><button onclick="deleteRecord('+ value.id +')" class="btn btn-danger">Delete</button></div>';
   }
   if(value.category_id==5){
     return 	'<div class="docimg" id="ppt_img"></div>'+'<div class="detalii_doc"><div class="nume">'+value.name+'</div>'+'<div class="descriere">'+value.description+'</div>'
-    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>';
+    +'<div class="autor">'+value.author+'</div><div class="pret">'+value.price+'</div>'+'</div>'
+    +'<div class="linkuri"><button onclick="viewRecord('+ value.id +')" class="btn btn-edit">Update</button><button onclick="deleteRecord('+ value.id +')" class="btn btn-danger">Delete</button></div>';
   }
   
 }
+//Add new document
+var addDoc=$('#addDoc');
+addDoc.on('click',function(){
+   $('#id').val('');
+    $('#category_id').val('');
+    $('#name').val('');
+    $('#description').val('');
+    $('#author').val('');
+    $('#price').val('');
+    
+    $('#myModalLabel').html('Add New Product');
+});
+function viewRecord(id) {
+    var url = "/documents/" + id;
+    
+    $.get(url, {}, function (data, status) {
+        //bind the values to the form fields
+        $('#category_id').val(data.category_id);
+        $('#name').val(data.name);
+        $('#description').val(data.description);
+        $('#author').val(data.author);
+        $('#price').val(data.price);
+        $('#id').val(id);
+
+        $('#myModalLabel').html('Edit Product');
+        
+        $('#add_new_record_modal').modal('show');
+    });
+}
+function saveRecord() {
+    //get data from the html form
+    var formData = $('#record_form').serializeObject();
+    
+    //decide if it's an edit or create
+    if(formData.id) {
+        updateRecord(formData);
+    } else {
+        createRecord(formData);
+    }
+}
+
+function createRecord(formData) {
+    $.ajax({
+        url: '/documents/',
+        type: 'POST',
+        accepts: {
+            json: 'application/json'
+        },
+        data: formData,
+        success: function(data) {
+            $('#add_new_record_modal').modal('hide');
+            
+            var row = '<tr id="row_id_'+ data.id +'">'
+            			+ displayColumns(data)
+        				+ '</tr>';
+            $('#articles').append(row);
+        } 
+    });
+}
+
+function updateRecord(formData) {
+    $.ajax({
+        url: '/documents/'+formData.id,
+        type: 'PUT',
+        accepts: {
+            json: 'application/json'
+        },
+        data: formData,
+        success: function(data) {
+            $('#row_id_'+formData.id+'>td.category_id').html(formData.category_id);
+            $('#row_id_'+formData.id+'>td.name').html(formData.name);
+            $('#row_id_'+formData.id+'>td.description').html(formData.description);
+            $('#row_id_'+formData.id+'>td.author').html(formData.author);
+            $('#row_id_'+formData.id+'>td.price').html(formData.price);
+            $('#add_new_record_modal').modal('hide');
+        } 
+    });
+}
+function deleteRecord(id) {
+    $.ajax({
+        url: '/documents/'+id,
+        type: 'DELETE',
+        success: function(data) {
+            $('#row_id_'+id).remove();
+        }
+    });
+}
+
 
 
 

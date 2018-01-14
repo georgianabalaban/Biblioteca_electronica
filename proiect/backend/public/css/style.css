@@ -849,10 +849,7 @@ a.button:hover, a.button:focus {
    background-size: auto 100%;
     background-repeat: no-repeat;
 }
-#detalii_doc{
-  width: 50%;
-  float:right;
-}
+
 .file{
   width: 100%;
     padding-left: 170px;
@@ -860,6 +857,17 @@ a.button:hover, a.button:focus {
 }
 .detalii_doc{
   margin-left: 147px;
+  width: 30%;
+  float: center;
+}
+.linkuri{
+      width: 52%;
+    position: relative;
+    bottom: 50px;
+    float: right;
+}
+.linkuri a:nth-child(1){
+  padding-right: 20px;
 }
 
 /*BUTON GRADIENT*/
@@ -892,4 +900,8 @@ a.button.gradientBtn:hover, a.button.gradientBtn:focus {
   display: inline-block;
   width: auto;
   background: linear-gradient(-45deg, #9DAF6E 0%, #109F9A 70%);
+}
+
+.btn-edit{
+  background-color: #219e9a;
 }
