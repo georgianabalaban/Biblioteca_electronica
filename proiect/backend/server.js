@@ -30,12 +30,12 @@ var Documents = sequelize.define('documents', {
 Documents.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
 //Categories.hasMany(Products)
 
-var app = express()
+var app = express();
 
-app.use('/nodeamin', nodeadmin(app))
+app.use('/nodeamin', nodeadmin(app));
 
 //access static files
-app.use(express.static('../frontend/build'))
+app.use(express.static('../frontend/build'));
 
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
@@ -94,12 +94,12 @@ app.delete('/categories/:id', function(request, response) {
 
 app.get('/documents', function(request, response) {
     Documents.findAll(
-        {
+        /*{
             include: [{
                 model: Categories,
                 where: { id: Sequelize.col('documents.category_id') }
             }]
-        }
+        }*/
         
         ).then(
             function(documents) {
@@ -134,6 +134,45 @@ app.put('/documents/:id', function(request, response) {
             response.status(404).send('Not found')
         }
     })
+})
+
+app.put('/categories/:aid/documents/:mid', (req, res, next) => {
+	Documents.findById(req.params.mid)
+		.then((document) => {
+			if (document){
+				return document.update(req.body, {fields : ['name', 'description']})
+			}
+			else{
+				res.status(404).send('not found')
+			}
+		})
+		.then(() => {
+			if (!res.headersSent){
+				res.status(201).send('modified')
+			}
+		})
+		.catch((err) => next(err))
+})
+
+app.post('/categories/:aid/documents', (req, res, next) => {
+	Categories.findById(req.params.aid)
+		.then((category) => {
+			if (category){
+				let document = req.body
+				document.category_id = category.id
+				return Documents.create(document)
+			}
+			else{
+				res.status(404).send('not found')
+			}
+		})
+		.then((messages) => {
+			if (!res.headersSent){
+				res.status(200).send('created')
+			}	
+		})
+		.catch((err) => next(err))
+	
 })
 
 app.delete('/documents/:id', function(request, response) {

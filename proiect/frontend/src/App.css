@@ -26,3 +26,65 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+#title{
+	font-family: 'Gloria Hallelujah', cursive !important;
+	margin-bottom:0;
+	height:100px;
+	text-align:center;
+}
+.Product {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em 1em;
+  margin: 1em;
+  cursor: pointer;
+  	font-family: 'Gloria Hallelujah', cursive !important;
+  width: 300px;
+  margin-left: auto;
+  font-size: 20px;
+  margin-right: auto;
+  margin-bottom: 20px;
+  transition: all ease-out 0.05s;
+  background-color: #525B92;
+  box-shadow: 0 0.2rem 0.2rem black;
+}
+  
+.Product:active {
+    box-shadow: 0 0.2rem 0.4rem black inset;
+    padding-top: 0.7rem;
+    margin-bottom: 0.8rem;
+    color: #D0D0D0;
+    background-color: #313A75;
+  }
+.buttons input{
+      border-radius: 50px;
+    padding: 0em 2em;
+    margin: 1em;
+    border: 0;
+    font-family: Raleway,sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    height: 20px;
+}
+.titleDetails{
+  	font-family: 'Gloria Hallelujah', cursive !important;
+}
+
+.bookToBeRead .fa-bookmark{
+	color:blueviolet;
+}
+li{
+	width:22%;
+	height:37px;
+	display: inline;
+	background: transparent;
+	padding:10px;
+	margin:none;
+	margin-bottom:20px;
+	cursor:pointer;
+	font-family: 'Dosis', sans-serif;
+	background: radial-gradient(white 30%,whitesmoke);
+	box-shadow: 2px 2px 2px grey;
+	border-right: 3px solid blueviolet;
+}

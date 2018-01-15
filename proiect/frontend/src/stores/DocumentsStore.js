@@ -25,8 +25,16 @@ class DocumentsStore{
       .catch((error) => console.warn(error))
   }
   saveOne(categoryId, documentId, document){
-    axios.put(SERVER + '/categories/' + categoryId + '/documents/' + documentId, document)
+    axios.put(SERVER + '/categories/' + categoryId + '/messages/' + documentId, document)
       .then(() => this.getAll(categoryId))
+      .catch((error) => console.warn(error))
+  }
+  getOne(categoryId,documentId){
+    axios(SERVER + '/categories/' + categoryId + '/documents/' + documentId)
+      .then((response) => {
+        this.selected = response.data
+        this.ee.emit('SINGLE_DOCUMENT_LOAD')
+      })
       .catch((error) => console.warn(error))
   }
 }

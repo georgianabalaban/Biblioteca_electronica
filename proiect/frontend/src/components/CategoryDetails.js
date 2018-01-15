@@ -7,17 +7,24 @@ import {EventEmitter} from 'fbemitter'
 const ee = new EventEmitter()
 const store = new DocumentsStore(ee)
 
+
 class CategoryDetails extends Component{
   constructor(props){
     super(props)
     this.state = {
-      documents : []
+      documents : [],
+      detailsFor : -1
+    }
+    this.cancelSelection = () => {
+      this.setState({
+        detailsFor : -1
+      })
     }
     this.addDocument = (document) => {
       store.addOne(this.props.category.id, document)
     }
-    this.deleteDocument = () => {}
-    this.saveDocument = () => {}
+    this.deleteDocument = (id) => {store.deleteOne(id)}
+    this.saveDocument = (id, document) => {store.saveOne(id, document)}
   }
   componentDidMount(){
     store.getAll(this.props.category.id)
@@ -28,10 +35,13 @@ class CategoryDetails extends Component{
     })
   }
   render(){
+    if (this.state.detailsFor === -1){
     return (
       <div>
-        Category {this.props.category.name}
-        <h3>These are the documents from the category:</h3>
+        <div class="titleDetails">
+          Category {this.props.category.name}
+          <h3>These are the documents from the category:</h3>
+        </div>
         {
           this.state.documents.map((m) => <Document document={m} onDelete={this.deleteDocument} key={m.id} onSave={this.saveDocument} />)
         }
@@ -39,6 +49,7 @@ class CategoryDetails extends Component{
         <DocumentForm onAdd={this.addDocument}/>
       </div>  
     )
+    }
   }
 }
 

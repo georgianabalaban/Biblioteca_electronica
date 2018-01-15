@@ -4,22 +4,93 @@
     <meta charset="UTF-8">
     <title>The library</title>
     
-    <!--Google Drive Integration-->
-    <script src="https://www.google.com/jsapi?key=AIzaSyCZteyg2GMMB-PJkyWf4T-8xn0Hx7MJ4E4"></script>
-	  <script src="https://apis.google.com/js/client.js?onload=initPicker"></script>
-	  <script>
-		function initPicker() {
-			var picker = new FilePicker({
-				apiKey: 'AIzaSyCZteyg2GMMB-PJkyWf4T-8xn0Hx7MJ4E4',
-				clientId: 456250320376,
-				buttonEl: document.getElementById('pick'),
-				onSelect: function(file) {
-					console.log(file);
-					alert('Selected ' + file.title);
-				}
-			});	
-		}
-	</script>
+    <!-- The Google API Loader script. -->
+    <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+  	<script type="text/javascript">
+   
+              // The Browser API key obtained from the Google Developers Console.
+              var developerKey = 'AIzaSyCtATWodivWrzYdrYbunx2-qQSinDHRhik';
+   
+              // The Client ID obtained from the Google Developers Console. Replace with your own Client ID.
+              var clientId = "456250320376-osmso8gsqddofju85icnn0t0oj228tr6.apps.googleusercontent.com";
+   
+              // Scope to use to access user's photos.
+              var scope = ['https://www.googleapis.com/auth/drive.file'];
+   
+              var pickerApiLoaded = false;
+              var oauthToken;
+   
+              // Use the API Loader script to load google.picker and gapi.auth.
+              function onApiLoad() {
+                  gapi.load('auth', {'callback': onAuthApiLoad});
+                  gapi.load('picker', {'callback': onPickerApiLoad});
+              }
+   
+              function onAuthApiLoad() {
+                  window.gapi.auth.authorize(
+                          {
+                              'client_id': clientId,
+                              'scope': scope,
+                              'immediate': false
+                          },
+                  handleAuthResult);
+              }
+   
+              function onPickerApiLoad() {
+                  pickerApiLoaded = true;
+                  createPicker();
+              }
+   
+              function handleAuthResult(authResult) {
+                  if (authResult && !authResult.error) {
+                      oauthToken = authResult.access_token;
+                      createPicker();
+                  }
+              }
+   
+              // Create and render a Picker object for picking user Photos.
+              function createPicker() {
+                  if (pickerApiLoaded && oauthToken) {
+                      var picker = new google.picker.PickerBuilder().
+                              addViewGroup(
+                                      new google.picker.ViewGroup(google.picker.ViewId.DOCS).
+                                      addView(google.picker.ViewId.DOCUMENTS).
+                                      addView(google.picker.ViewId.PRESENTATIONS)).
+                              setOAuthToken(oauthToken).
+                              setDeveloperKey(developerKey).
+                              setCallback(pickerCallback).
+                              build();
+                      picker.setVisible(true);
+                  }
+              }
+   
+              // A simple callback implementation.
+              function pickerCallback(data) {
+                  var url = 'nothing';
+                  var name = 'nothing';
+                  if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+                      var doc = data[google.picker.Response.DOCUMENTS][0];
+                      url = doc[google.picker.Document.URL];
+                      name = doc.name;
+                      var param = {'fileId': doc.id, 'oAuthToken': oauthToken, 'name': name}
+                      console.log(param);
+                      document.getElementById('result').innerHTML = "Downloading...";
+                      $.post('download.php', param,
+                              function (returnedData) {
+                                  document.getElementById('result').innerHTML = "Download completed";
+                              });
+   
+   
+                     // var val = name.toLowerCase();
+                     // var regex = new RegExp("(.*?)\.(js|js)$");
+                      //if (!(regex.test(val))) {
+                      //    alert('Please select correct file format');
+                      //}
+                  }
+                 // var message = 'You picked: ' + url;
+                 // document.getElementById('result').innerHTML = message;
+              }
+    </script>
     
     
     <!-- Jquery JS file -->
@@ -66,19 +137,12 @@
         <div class="menu-search">
           <!-- Main Navigation -->
           
-
-          <!-- Search -->
-          <div class="catalog-search">
-            <input class="shuffle-search input_field " type="search" autocomplete="off" value="" maxlength="128" id="input-search" />
-            <label class="input_label" for="input-search">
-              <span class="input_label-content">Search Document</span>
-              <span class="input_label-search"></span>
-            </label>
-          </div>
-          
           <span class="gradientContainer">
             <a data-target="#add_new_record_modal" data-toggle="modal" href="#myModalLabel" class="button gradientBtn" id="addDoc">Add new document</a>
           </span>
+          <div id="googleDrive">
+            OR    <button onclick="onApiLoad()">Pick From Google Drive</button>
+          </div>
 
         </div>
       </div>
@@ -118,7 +182,7 @@
             
           </div>
           <div id="right" style="width:50%;float:right">
-            
+
           </div>
       </div>
     
@@ -157,7 +221,6 @@
                         <label for="name">Pret</label>
                         <input type="text" name="price" id="price" placeholder="Pret" class="form-control"/>
                     </div>
-                    <button type="button" id="pick">Pick File</button>
                 </form>
             </div>
             <div class="modal-footer">

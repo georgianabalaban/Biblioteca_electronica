@@ -54,9 +54,11 @@ class CategoryList extends Component{
   render(){
     if (this.state.detailsFor === -1){
       return (<div>
+        
         {
           this.state.categories.map((e) => <Category category={e} onDelete={deleteCategory} key={e.id} onSave={saveCategory} onSelect={this.selectCategory} />)
         }
+
         <CategoryForm handleAdd={addCategory}/>
       </div>)      
     }
@@ -64,7 +66,9 @@ class CategoryList extends Component{
       return (
         <div>
           <CategoryDetails category={this.state.selected} />
+          <div class="buttons">
           <input type="button" value="back" onClick={() => this.cancelSelection()}/>
+          </div>
         </div>  
       )
     }
