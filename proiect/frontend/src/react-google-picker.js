@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import loadScript from 'load-script';
 
 const GOOGLE_SDK_URL = 'https://apis.google.com/js/api.js';
 
 let scriptLoadingStarted = false;
+/*global google*/
 
 export default class GoogleChooser extends React.Component {
 

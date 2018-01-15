@@ -23,7 +23,9 @@ class CategoryDetails extends Component{
     this.addDocument = (document) => {
       store.addOne(this.props.category.id, document)
     }
-    this.deleteDocument = (id) => {store.deleteOne(id)}
+    this.deleteDocument = (document)=>{
+      store.deleteOne(this.props.category.id,document)
+ }
     this.saveDocument = (id, document) => {store.saveOne(id, document)}
   }
   componentDidMount(){
